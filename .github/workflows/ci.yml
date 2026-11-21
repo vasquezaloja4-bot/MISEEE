@@ -36,4 +36,10 @@ jobs:
         run: |
           PKG_FILE=$(find . -maxdepth 3 -name "package.json" -not -path "*/node_modules/*" | head -n 1)
           DIR=$(dirname "$PKG_FILE")
-          cd "$DIR" && npm test --if-present
+          cd "$DIR"
+          # Only run tests if a real custom test script is defined (avoids the default 'no test specified' error)
+          if node -e 'const p = require("./package.json"); process.exit(p.scripts && p.scripts.test && !p.scripts.test.includes("no test specified") ? 0 : 1)'; then
+            npm test
+          else
+            echo "No custom test script defined in package.json. Skipping tests."
+          fi
