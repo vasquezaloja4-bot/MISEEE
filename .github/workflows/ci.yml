@@ -43,3 +43,8 @@ jobs:
           else
             echo "No custom test script defined in package.json. Skipping tests."
           fi
+          - name: Upload Build Artifacts
+  uses: actions/upload-artifact@v4
+  with:
+    name: my-build-files
+    path: build/ # Replace with your actual output folder path (e.g., dist/, build/, etc.)
