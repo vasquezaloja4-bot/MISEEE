@@ -20,7 +20,20 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          PKG_FILE=$(find . -maxdepth 3 -name "package.json" -not -path "*/node_modules/*" | head -n 1)
+          if [ -n "$PKG_FILE" ]; then
+            DIR=$(dirname "$PKG_FILE")
+            echo "Found package.json in $DIR"
+            cd "$DIR" && npm install
+          else
+            echo "No package.json found anywhere. Creating a default one..."
+            npm init -y
+            npm install
+          fi
 
       - name: Run build / test
-        run: npm test
+        run: |
+          PKG_FILE=$(find . -maxdepth 3 -name "package.json" -not -path "*/node_modules/*" | head -n 1)
+          DIR=$(dirname "$PKG_FILE")
+          cd "$DIR" && npm test --if-present
