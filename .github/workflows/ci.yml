@@ -21,8 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./your-folder-name  # Replace with your subfolder path (e.g., ./client), or remove this line if your files are in the root
 
       - name: Run build / test
         run: npm test
-        working-directory: ./your-folder-name  # Match the same path here if using a subfolder
